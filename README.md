@@ -1,2 +1,3 @@
-# apnsPHP
-Apple Push Notification Service(APNS) Implementation using PHP.
+
+# xAPNS v1.0
+Test Your Apple Push Notification Service without any setup. 
