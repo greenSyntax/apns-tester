@@ -4,10 +4,7 @@ class ApnsManager{
 
 	function __construct(){
 
-		//Constant
 		require_once 'include/config.php';
-
-		//Model
 		require_once 'model/apns_config.php';
 	}
 
@@ -56,9 +53,8 @@ class ApnsManager{
 
 	function sendPushNotification($token, $message, $certificatePath, $isSandbox){
 
-
 		//Configration
-		$configration = $this->getAPNSConfigration(DEVELOPMENT_GATEWAY, (int)DEVELOPMENT_PORT, null, $token, $certificatePath);
+		$configration = $this->getAPNSConfigration(APNS_GATEWAY, (int)DEVELOPMENT_PORT, null, $token, $certificatePath);
 
 		$apnsHost = $configration->getHostName();
 		$apnsCert = $configration->getCertificatePath(); 

@@ -15,6 +15,7 @@ class UserInput{
 		$this->pemPath = $pemPath;
 		$thos->isSandbox = $isSandbox;
 
+
 	}
 
 }

@@ -3,6 +3,11 @@
 require_once 'manager/apns_manager.php';
 require_once 'include/global_context.php';
 require_once 'manager/upload_manager.php';
+require_once 'include/resource.php';
+require_once 'include/constants.php';
+
+//Error Reporting
+error_reporting(0);
 
 //Error Array
 $errorLog = array();
@@ -37,7 +42,7 @@ if(array_key_exists('apnsPush',$_POST)){
 	}
 	else{
 
-		$error = "There is No Token.";
+		$error = ERROR_NO_TOKEN;
 		array_push($errorLog, $error);
 		
 	}
@@ -48,7 +53,27 @@ if(array_key_exists('apnsPush',$_POST)){
 	}
 	else{
 
-		$error = "There is No Push Message.";
+		$error = ERROR_NO_MESSAGE;
+		array_push($errorLog, $error);
+	}
+
+	if(!empty($_POST['certificate_mode'])){
+
+		
+		if($_POST['certificate_mode'] == "Development"){
+
+			//DEVELOPMENT
+			GlobalContext::$modeOfDeployment = "Development";
+		}
+		else{
+
+			//PRODUCTION
+			GlobalContext::$modeOfDeployment = "Production";
+		}
+	}
+	else{
+
+		$error = ERROR_NO_DEVELOPEMNT_MODE;
 		array_push($errorLog, $error);
 	}
 
@@ -59,9 +84,9 @@ if(array_key_exists('apnsPush',$_POST)){
 
 		//Successfully Sent
 		echo '<div class="alert alert-success" role="success">
-  							<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-  							<span class="sr-only">Error:</span> Your Push Notification has successfully sent to Apple Push Notification Service.
-						</div>';
+		<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+		<span class="sr-only">Error:</span> Your Push Notification has successfully sent to Apple Push Notification Service.
+		</div>';
 	} 
 }
 
@@ -71,7 +96,7 @@ if(array_key_exists('apnsPush',$_POST)){
 <html lang="en">
 <head>
 	<meta charset="UTF-16">
-	<title>APNS Panel</title>
+	<title>xAPNS</title>
 
 	<!-- Style -->
 	<link rel="stylesheet" href="style/style.css">
@@ -82,6 +107,10 @@ if(array_key_exists('apnsPush',$_POST)){
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+	<!-- Minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 	
@@ -89,52 +118,68 @@ if(array_key_exists('apnsPush',$_POST)){
 		<div class="col-sm-2"></div>
 		<div class="col-sm-8">
 			<p></p>
-			<h1 class="headingFont"><span class="glyphicon glyphicon-apple"></span> xAPNS v1.0</h1>
-			<h4 class="secondaryFont">Test Your Apple Push Notification Service. </h4>
+			<h1 class="headingFont"><span class="glyphicon glyphicon-apple"></span> <?php echo APP_NAME; ?> v<?php echo VERSION; ?></h1>
+			<h4 class="secondaryFont"><?php echo DESCRIPTION; ?></h4>
+			<!-- <a href="#" class="grayFont text-right"><kbd> Configure Payload </kbd></a> -->
 			<hr>
 
 			<form method="POST" enctype="multipart/form-data">
-				<!-- 30BE50C4CC7CBE5F6E6411ECCE98968E6C147FBEEC78AEB894DDAC515EC2F220 -->
 				
-			<label class="control-label primaryFont"><span class="glyphicon glyphicon-tag"></span> APNS Token</label>
-			<input type="text" name="pushToken" value="" placeholder="Device APNS Token" class="form-control primaryFont"></input>
-			<br>
-			<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span> Push Notification Message</label>
-			<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
-			<br>
-			<label class="control-label primaryFont"><span class="glyphicon glyphicon-paperclip"></span> APNS Certificate (*.pem)</label>
-			
-			<input type="file" class="primaryFont" name="certificate_upload"><br>
-			<!-- <input type="submit" class="btn btn-default" value="Upload"> -->
+				<label class="control-label primaryFont"><span class="glyphicon glyphicon-tag"></span><?php echo LABEL_TOKEN; ?></label> 
+				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_TOKEN; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+				<input type="text" name="pushToken" value="" placeholder="Device APNS Token" class="form-control primaryFont"></input>
+				<br>
+				<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span><?php echo LABEL_MESSAGE; ?></label>
+				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+				<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
+				<br>
+				<p></p>
+				<label class="control-label primaryFont"><span class="glyphicon glyphicon-bookmark"></span> Development Mode</label>
+				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MODE; ?> "><span class="glyphicon glyphicon-question-sign"></span></a>
+				<select name="certificate_mode" id="certificate_mode" class="form-control">
+					<option id="mode_development" value="Development"><?php echo LABEL_MODE_DEVELOPMENT; ?></option>
+					<option ="mode_production" value="Production"><?php echo LABEL_MODE_PRODUCTION; ?></option>
+				</select>
+				<br>
+				<label class="control-label primaryFont"><span class="glyphicon glyphicon-paperclip"></span><?php echo LABEL_CERTIFICATE; ?></label>
+				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_CERTFICATE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+				<input type="file" class="primaryFont" name="certificate_upload"><br>
 
-			<p></p>
-			<input type="submit" class="btn btn-success primaryFont" name="apnsPush" id="apnsPush" value="Send Push Notification" /><br/>
-			<br>
-			<span name="error_lable" id="error_lable" class="text-warning primaryFont">
-				<?php
-				 if(isset($errorLog)){
+				<p></p>
+				<input type="submit" class="btn btn-success primaryFont" name="apnsPush" id="apnsPush" value="Send Push Notification" /><br/>
+				<br>
+				<span name="error_lable" id="error_lable" class="text-warning primaryFont">
+					<?php
+					if(isset($errorLog)){
 
-				 	foreach ($errorLog as $error) {
-				 		
-				 		echo '<div class="alert alert-danger" role="alert">
-  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  							<span class="sr-only">Error:</span>'.
- 						 	$error.'
-						</div>';
-				 	}
-				 } 
-				 ?>
+						foreach ($errorLog as $error) {
+
+							echo '<div class="alert alert-danger" role="alert">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>'.
+							$error.'
+							</div>';
+						}
+					} 
+					?>
 				</span>
 			</form>
-			<footer class="footer">
-			<hr>
-			<p class="text-center secondaryFont">Made with <span class="glyphicon glyphicon-heart"></span> | <a href="https://github.com/greenSyntax">Abhishek Kumar Ravi</a></p>
+			<footer>
+				<hr>
+				<p class="text-center secondaryFont"><?php echo LABEL_MADE_WITH; ?> <span class="glyphicon glyphicon-heart"></span> | <a href="<?php echo GITHUB_PATH; ?>"><?php echo AUTHOR; ?></a></p>
 			</div>	
-			</footer>
+		</footer>
 
-		</div>
-		<div class="col-sm-2"></div>
 	</div>
+	<div class="col-sm-2"></div>
+</div>
+
+<script>
+$(document).ready(function(){
+
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
 
 </body>
 </html>
