@@ -11,7 +11,7 @@ class Deployment{
 //APNS Gateway
 if(GlobalContext::$modeOfDeployment == Deployment::$target_production){
 
-	define("APNS_GATEWAY", "$gateway = 'gateway.push.apple.com");	
+	define("APNS_GATEWAY", "gateway.push.apple.com");	
 }
 else if(GlobalContext::$modeOfDeployment == Deployment::$target_development){
 

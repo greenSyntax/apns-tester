@@ -109,7 +109,7 @@ if(array_key_exists('apnsPush',$_POST)){
 
 	<!-- Minified JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -132,7 +132,32 @@ if(array_key_exists('apnsPush',$_POST)){
 				<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span><?php echo LABEL_MESSAGE; ?></label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
 				<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
-				<br>
+				
+				<!--
+				
+				<div class="checkbox">
+					<label class="primaryFont">
+						<input type="checkbox" value="Configure APNS Payload JSON." onClick="unhide(this, 'payload_json')"> Configure APNS Payload JSON.
+					</label>
+				</div>
+				
+				<div class="hidden" id="payload_json">
+
+					<label class="control-label primaryFont"><span class="glyphicon glyphicon-volume-down"></span><?php echo LABEL_SOUND_NAME; ?></label>
+					<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+					<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
+					<br>
+					<label class="control-label primaryFont"><span class="glyphicon glyphicon-star"></span><?php echo LABEL_BADGE_NUMBER; ?></label>
+					<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+					<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
+					<br>
+					<label class="control-label primaryFont"><span class="glyphicon glyphicon-volume-off"></span><?php echo LABEL_IS_SILENT_PUSH; ?></label>
+					<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
+					<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
+					<br>
+				</div>
+			-->
+
 				<p></p>
 				<label class="control-label primaryFont"><span class="glyphicon glyphicon-bookmark"></span> Development Mode</label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MODE; ?> "><span class="glyphicon glyphicon-question-sign"></span></a>
@@ -146,6 +171,7 @@ if(array_key_exists('apnsPush',$_POST)){
 				<input type="file" class="primaryFont" name="certificate_upload"><br>
 
 				<p></p>
+
 				<input type="submit" class="btn btn-success primaryFont" name="apnsPush" id="apnsPush" value="Send Push Notification" /><br/>
 				<br>
 				<span name="error_lable" id="error_lable" class="text-warning primaryFont">
@@ -166,7 +192,7 @@ if(array_key_exists('apnsPush',$_POST)){
 			</form>
 			<footer>
 				<hr>
-				<p class="text-center secondaryFont"><?php echo LABEL_MADE_WITH; ?> <span class="glyphicon glyphicon-heart"></span> | <a href="<?php echo GITHUB_PATH; ?>"><?php echo AUTHOR; ?></a></p>
+				<p class="text-center secondaryFont"><?php echo LABEL_MADE_WITH; ?> <span class="glyphicon glyphicon-headphones"></span> <strong>Stackoverflow</strong> | <a href="<?php echo GITHUB_PATH; ?>"><?php echo AUTHOR; ?></a></p>
 			</div>	
 		</footer>
 
@@ -177,9 +203,27 @@ if(array_key_exists('apnsPush',$_POST)){
 <script>
 $(document).ready(function(){
 
-    $('[data-toggle="tooltip"]').tooltip();   
+	$('[data-toggle="tooltip"]').tooltip();   
 });
-</script>
+
+function unhide(clickedButton, divID) {
+
+	var item = document.getElementById(divID);
+
+	if (item) {
+
+		if(item.className=='hidden'){
+
+			item.className = 'unhidden' ;
+			clickedButton.value = 'hide'
+		}else{
+
+			item.className = 'hidden';
+			clickedButton.value = 'unhide'
+		}
+	}}
+
+	</script>
 
 </body>
 </html>

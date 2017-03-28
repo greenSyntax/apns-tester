@@ -29,3 +29,11 @@
     width: 100%;
 }
 
+.hidden{
+    display:none;
+}
+
+.unhidden{
+    display:block;
+}
+
