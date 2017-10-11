@@ -8,7 +8,7 @@ require_once 'include/constants.php';
 
 //Error Reporting
 error_reporting(0);
-print_r($_POST);
+
 //Error Array
 $errorLog = array();
 
@@ -132,10 +132,12 @@ if(array_key_exists('apnsPush',$_POST)){
 				<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span><?php echo LABEL_MESSAGE; ?></label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
 				<br>
-				<input type="checkbox" class="form-control" name="isJSON" value="true"> Payload is in JSON
-				<p></p>
 				<textarea rows="4" name="pushMessage" class="form-control primaryFont" placeholder="Payload for Push Notification"></textarea>
-
+				<label class="form-check-label">
+    			<input class="form-check-input" name="isJSON" type="checkbox" value="true">
+    			Payload is as JSON
+  			</label>
+				<p></p>
 				<!--
 
 				<div class="checkbox">
