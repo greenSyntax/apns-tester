@@ -8,7 +8,7 @@ require_once 'include/constants.php';
 
 //Error Reporting
 error_reporting(0);
-
+print_r($_POST);
 //Error Array
 $errorLog = array();
 
@@ -21,7 +21,7 @@ if(isset($_FILES['certificate_upload'])){
 	if(GlobalContext::$hasCertificateUploaded == true){
 
 		//File Destination Path
-		GlobalContext::$pathOfCertificate = $uploadResponse; 		
+		GlobalContext::$pathOfCertificate = $uploadResponse;
 	}
 	else{
 
@@ -38,15 +38,15 @@ if(array_key_exists('apnsPush',$_POST)){
 	# VALIDATION
 	if(!empty($_POST['pushToken'])){
 
-		$token = $_POST['pushToken'];	
+		$token = $_POST['pushToken'];
 	}
 	else{
 
 		$error = ERROR_NO_TOKEN;
 		array_push($errorLog, $error);
-		
+
 	}
-	
+
 	if(!empty($_POST['pushMessage'])){
 
 		$message = $_POST['pushMessage'];
@@ -59,7 +59,7 @@ if(array_key_exists('apnsPush',$_POST)){
 
 	if(!empty($_POST['certificate_mode'])){
 
-		
+
 		if($_POST['certificate_mode'] == "Development"){
 
 			//DEVELOPMENT
@@ -80,14 +80,14 @@ if(array_key_exists('apnsPush',$_POST)){
 	if(GlobalContext::$hasCertificateUploaded == true){
 
 		$apnsManager = new ApnsManager();
-		$apnsManager->sendPushNotification($token, $message, GlobalContext::$pathOfCertificate, false); 
+		$apnsManager->sendPushNotification($token, $message, GlobalContext::$pathOfCertificate, false);
 
 		//Successfully Sent
 		echo '<div class="alert alert-success" role="success">
 		<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
 		<span class="sr-only">Error:</span> Your Push Notification has successfully sent to Apple Push Notification Service.
 		</div>';
-	} 
+	}
 }
 
 ?>
@@ -113,7 +113,7 @@ if(array_key_exists('apnsPush',$_POST)){
 
 </head>
 <body>
-	
+
 	<div class="container">
 		<div class="col-sm-2"></div>
 		<div class="col-sm-8">
@@ -124,23 +124,26 @@ if(array_key_exists('apnsPush',$_POST)){
 			<hr>
 
 			<form method="POST" enctype="multipart/form-data">
-				
-				<label class="control-label primaryFont"><span class="glyphicon glyphicon-tag"></span><?php echo LABEL_TOKEN; ?></label> 
+
+				<label class="control-label primaryFont"><span class="glyphicon glyphicon-tag"></span><?php echo LABEL_TOKEN; ?></label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_TOKEN; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
 				<input type="text" name="pushToken" value="" placeholder="Device APNS Token" class="form-control primaryFont"></input>
 				<br>
 				<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span><?php echo LABEL_MESSAGE; ?></label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
-				<input type="text" name="pushMessage" class="form-control primaryFont" placeholder="Your Message for Push Notification"></input>
-				
+				<br>
+				<input type="checkbox" class="form-control" name="isJSON" value="true"> Payload is in JSON
+				<p></p>
+				<textarea rows="4" name="pushMessage" class="form-control primaryFont" placeholder="Payload for Push Notification"></textarea>
+
 				<!--
-				
+
 				<div class="checkbox">
 					<label class="primaryFont">
 						<input type="checkbox" value="Configure APNS Payload JSON." onClick="unhide(this, 'payload_json')"> Configure APNS Payload JSON.
 					</label>
 				</div>
-				
+
 				<div class="hidden" id="payload_json">
 
 					<label class="control-label primaryFont"><span class="glyphicon glyphicon-volume-down"></span><?php echo LABEL_SOUND_NAME; ?></label>
@@ -186,14 +189,14 @@ if(array_key_exists('apnsPush',$_POST)){
 							$error.'
 							</div>';
 						}
-					} 
+					}
 					?>
 				</span>
 			</form>
 			<footer>
 				<hr>
 				<p class="text-center secondaryFont"><?php echo LABEL_MADE_WITH; ?> <span class="glyphicon glyphicon-headphones"></span> <strong>Stackoverflow</strong> | <a href="<?php echo GITHUB_PATH; ?>"><?php echo AUTHOR; ?></a></p>
-			</div>	
+			</div>
 		</footer>
 
 	</div>
@@ -203,7 +206,7 @@ if(array_key_exists('apnsPush',$_POST)){
 <script>
 $(document).ready(function(){
 
-	$('[data-toggle="tooltip"]').tooltip();   
+	$('[data-toggle="tooltip"]').tooltip();
 });
 
 function unhide(clickedButton, divID) {

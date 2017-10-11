@@ -5,7 +5,7 @@ define("GITHUB_PATH", "https://github.com/greenSyntax");
 
 define("APP_NAME", "xAPNS");
 define("DESCRIPTION", "Test Your Apple Push Notification Service.");
-define("VERSION", "1.0.2");
+define("VERSION", "1.0.3");
 
 define("LABEL_TOKEN", " APNS Token");
 define("TOOLTIP_TOKEN", "Unique Token which you'll get in your iPhone. (Refer to  #123)");
@@ -27,7 +27,7 @@ define("UPLOAD_FILE_SIZE", "500000");
 define("FILE_TYPE", "pem");
 define("JSON_DATA", '
 {
-	"aps": 
+	"aps":
 	{
 		"alert" : "Hello World",
 		"sound" : "default",

@@ -23,7 +23,7 @@ class ApnsManager{
 		//SSL Certifcate
 		$apnsConfiggration = new ApnsConfig($hostName, $fullPathOfCertificate, $hostPort, $certificatePassword, $apnsToken );
 		return $apnsConfiggration;
-		
+
 	}
 
 	private function preparePayload($messageText){
@@ -38,33 +38,38 @@ class ApnsManager{
 
 		$streamContext = stream_context_create();
 		stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
-		
+
 		if($passwordOfCertificate != null){
 
 			//When There is password for SSL Certficate.
-			stream_context_set_option($streamContext, 'ssl', 'passphrase', $apnsPass);	
+			stream_context_set_option($streamContext, 'ssl', 'passphrase', $apnsPass);
 		}
 
 		return $streamContext;
-		
+
 	}
 
 	# Public Methods
 
-	function sendPushNotification($token, $message, $certificatePath, $isSandbox){
+	function sendPushNotification($token, $message, $certificatePath, $isSandbox, $isJSON = false){
 
 		//Configration
 		$configration = $this->getAPNSConfigration(APNS_GATEWAY, (int)DEVELOPMENT_PORT, null, $token, $certificatePath);
 
 		$apnsHost = $configration->getHostName();
-		$apnsCert = $configration->getCertificatePath(); 
-		$apnsPort = $configration->getHostPort(); 
-		$apnsPass = $configration->getCertificatePassword(); 
+		$apnsCert = $configration->getCertificatePath();
+		$apnsPort = $configration->getHostPort();
+		$apnsPass = $configration->getCertificatePassword();
 		$token = $configration->getApnsToken();
 
 		//Prepare Payload
-		$payloadArray = $this->preparePayload($message);
-		$payload['aps'] =  $payloadArray;
+		if($isJSON == false){
+			$payloadArray = $this->preparePayload($message);
+			$payload['aps'] =  $payloadArray;
+		}
+		else{
+			$payload = $message;
+		}
 
 		//Parse into JSON
 		$output = json_encode($payload);
