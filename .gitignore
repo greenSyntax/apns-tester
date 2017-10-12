@@ -1,3 +1,4 @@
 uploads/*
 *.pem
 *.p12
+.DS_Store
