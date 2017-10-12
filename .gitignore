@@ -1,4 +1,3 @@
-uploads/*
-*.pem
-*.p12
+.pem
+.p12
 .DS_Store
