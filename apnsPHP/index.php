@@ -49,7 +49,14 @@ if(array_key_exists('apnsPush',$_POST)){
 
 	if(!empty($_POST['pushMessage'])){
 
-		$message = $_POST['pushMessage'];
+		if($_POST['isJSON']== "true"){
+				$isJSON = true;
+		}
+		else{
+				$isJSON = false;
+		}
+
+			$message = $_POST['pushMessage'];
 	}
 	else{
 
@@ -77,10 +84,12 @@ if(array_key_exists('apnsPush',$_POST)){
 		array_push($errorLog, $error);
 	}
 
+
+
 	if(GlobalContext::$hasCertificateUploaded == true){
 
 		$apnsManager = new ApnsManager();
-		$apnsManager->sendPushNotification($token, $message, GlobalContext::$pathOfCertificate, false);
+		$apnsManager->sendPushNotification($token, $message, GlobalContext::$pathOfCertificate, false, $isJSON);
 
 		//Successfully Sent
 		echo '<div class="alert alert-success" role="success">
@@ -131,9 +140,10 @@ if(array_key_exists('apnsPush',$_POST)){
 				<br>
 				<label class="control-label primaryFont"><span class="glyphicon glyphicon-comment"></span><?php echo LABEL_MESSAGE; ?></label>
 				<a href="#" data-toggle="tooltip" title="<?php echo TOOLTIP_MESSAGE; ?>"><span class="glyphicon glyphicon-question-sign"></span></a>
-				<br>
+
 				<textarea rows="4" name="pushMessage" class="form-control primaryFont" placeholder="Payload for Push Notification"></textarea>
-				<label class="form-check-label">
+				<br>
+				<label class="formJson">
     			<input class="form-check-input" name="isJSON" type="checkbox" value="true">
     			Payload is as JSON
   			</label>

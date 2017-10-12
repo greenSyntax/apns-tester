@@ -46,12 +46,11 @@ class ApnsManager{
 		}
 
 		return $streamContext;
-
 	}
 
 	# Public Methods
 
-	function sendPushNotification($token, $message, $certificatePath, $isSandbox, $isJSON = false){
+	function sendPushNotification($token, $message, $certificatePath, $isSandbox, $isJSON){
 
 		//Configration
 		$configration = $this->getAPNSConfigration(APNS_GATEWAY, (int)DEVELOPMENT_PORT, null, $token, $certificatePath);
@@ -66,13 +65,16 @@ class ApnsManager{
 		if($isJSON == false){
 			$payloadArray = $this->preparePayload($message);
 			$payload['aps'] =  $payloadArray;
+
+			//Parse into JSON
+			$output = json_encode($payload);
 		}
 		else{
-			$payload = $message;
+			$output = $message;
 		}
 
-		//Parse into JSON
-		$output = json_encode($payload);
+		// Print the Payload
+		 echo $output;
 
 		//Split Token in Numeral.
 		$token = $this->getToken($token);
