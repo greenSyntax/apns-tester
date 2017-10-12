@@ -74,7 +74,7 @@ class ApnsManager{
 		}
 
 		// Print the Payload
-		 echo $output;
+		# echo $output;
 
 		//Split Token in Numeral.
 		$token = $this->getToken($token);

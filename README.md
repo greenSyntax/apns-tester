@@ -29,7 +29,13 @@ Here, pushcert.p12 is the name of p12 file. Your's might be different. And, I'm 
 ## Payload
 Simplest payload would look like,
 ```
-{"aps":{"alert":"This is my ROFL Push Message","badge":0,"sound":"default"}}
+{
+	"aps": {
+		"alert": "This is my ROFL Push Message",
+		"badge": 0,
+		"sound": "default"
+	}
+}
 
 ```
 
